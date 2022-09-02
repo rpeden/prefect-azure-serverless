@@ -1,3 +1,3 @@
 # Azure Functions
 
-Refer to [Serverless docs](https://serverless.com/framework/docs/providers/azure/guide/intro/) for more information.
+WIP examples of using the Serverless framework to create event-driven Prefect flows on Azure.
