@@ -1,0 +1,52 @@
+# this is the name of the function app that will be created and
+# deployed on Azure.
+service: prefect-blob-handler
+
+frameworkVersion: '3'
+
+provider:
+  name: azure
+  region: East US
+  runtime: python3.9 # python3.7 or python3.8 also available
+  os: linux  # linux is the only operating system available for python
+  # prefix: "sample"  # prefix of generated resource name
+  # subscriptionId: A356AC8C-E310-44F4-BF85-C7F29044AF99
+  # stage: dev
+  # type: premium  # premium azure functions
+
+  environment: # these will be created as application settings
+    PREFECT_API_URL: ''
+    PREFECT_API_KEY: ''
+    BlobConnectionString: 'DefaultEndpointsProtocol=https;AccountName=rpedenprefect;AccountKey=lsdiIOm0IRhIaSVcH1+S/YWXoUbQSK89B/WMK7iEIH+Cf3/EoL2Aczh5XZcjynNCAjeZLP0bPS14+ASt+V5w1A==;EndpointSuffix=core.windows.net'
+
+plugins:
+  - serverless-azure-functions
+
+package:
+  patterns:
+    - '!env/**'
+    - '!.env/**'
+    - '!local.settings.json'
+    - '!.vscode/**'
+    - '!__pycache__/**'
+    - '!node_modules/**'
+    - '!.python_packages/**'
+    - '!.funcignore'
+    - '!package.json'
+    - '!package-lock.json'
+    - '!.gitignore'
+    - '!.git/**'
+  # - '!exclude-me.py'
+  # - '!exclude-me-dir/**'
+  #   - include-me.py
+  #   - include-me-dir/**
+
+storageBlob:
+  handler: src/handlers/storage_blob:main
+  events:
+  - blob:
+    x-azure-settings:
+      name: myblob # Specifies which name is available on `context`
+      path: blob-watch/{name}
+      connection: BlobConnectionString # App Setting/environment variable which contains Storage Account Connection String
+

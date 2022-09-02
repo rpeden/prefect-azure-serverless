@@ -1,0 +1,2 @@
+azure-functions
+prefect >= 2.1.1
